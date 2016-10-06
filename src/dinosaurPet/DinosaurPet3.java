@@ -18,7 +18,9 @@ public class DinosaurPet3 {
     //Launched on start of program
     public static void main(String[] args) {
         String name = getName();
+        String species = getSpecies();
         outputName(name);
+        outputSpecies(species, name);
         int thirst = getThirstLevel();
         outputThirst(thirst, name);
         int hunger = getHungerLevel();
@@ -30,6 +32,11 @@ public class DinosaurPet3 {
     //Outputs the name of the pet
     public static void outputName(String name){
         System.out.println("Happy birthday " + name + "!");
+    }
+    
+    //Outputs the name of the pet
+    public static void outputSpecies(String species, String name){
+        System.out.println(name + " is a " + species + ".");
     }
     
     //Outputs the thirst level of the pet
@@ -51,18 +58,23 @@ public class DinosaurPet3 {
         }else if(anger == 2){
             System.out.println(name + " is getting pretty angry now.");
         }else if(anger == 3){
-            System.out.println(name + " has started to behave aggressively.");
+            System.out.println(name + " is getting quite dangerous now!");
         }else if(anger == 4){
-            System.out.println(name + " is really getting dangerous now!");
-        }else{
             System.out.println(name + " is about ready to explode! "
                     + "Your pet is being put down for everyone's safety.");
+        }else{
+            System.out.println("How is " + name + " not dead yet?!");
         }
     }
     
     //Gets the name of the pet from the user
     public static String getName(){
         return input("What is your pet's name?");
+    }
+    
+    //Gets the species of the pet from the user
+    public static String getSpecies(){
+        return input("What is your pet's species?");
     }
     
     //Gets the thirst level of the pet (currently at random)
