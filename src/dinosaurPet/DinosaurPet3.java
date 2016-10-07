@@ -60,10 +60,9 @@ public class DinosaurPet3 {
         }else if(anger == 3){
             System.out.println(name + " is getting quite dangerous now!");
         }else if(anger == 4){
-            System.out.println(name + " is about ready to explode! "
-                    + "Your pet is being put down for everyone's safety.");
+            System.out.println(name + " is about ready to explode!");
         }else{
-            System.out.println("How is " + name + " not dead yet?!");
+            System.out.println("Your pet is being put down for everyone's safety.");
         }
     }
     

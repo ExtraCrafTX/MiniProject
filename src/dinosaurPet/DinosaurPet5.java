@@ -42,10 +42,12 @@ public class DinosaurPet5 {
                 System.out.println("Please input a valid action.");
                 continue;
             }
+            updatePet(pet);
             System.out.println();
             outputThirst(pet);
             outputHunger(pet);
             outputIrritation(pet);
+            calculateAnger(pet);
             outputAnger(pet);
         }
     }
@@ -92,10 +94,9 @@ public class DinosaurPet5 {
         }else if(anger == 3){
             System.out.println(name + " is getting quite dangerous now!");
         }else if(anger == 4){
-            System.out.println(name + " is about ready to explode! "
-                    + "Your pet is being put down for everyone's safety.");
+            System.out.println(name + " is about ready to explode!");
         }else{
-            System.out.println("How is " + name + " not dead yet?!");
+            System.out.println("Your pet is being put down for everyone's safety.");
         }
     }
     
@@ -127,6 +128,22 @@ public class DinosaurPet5 {
         return random.nextInt(11);
     }
     
+    public static void updatePet(Pet5 pet){
+        Random random = new Random();
+        int action = random.nextInt(3);
+        switch(action){
+            case 0:
+                addThirst(pet);
+                break;
+            case 1:
+                addHunger(pet);
+                break;
+            case 2:
+                addIrritation(pet);
+                break;
+        }
+    }
+    
     //Gets input from the user with the specified message
     public static String input(String message){
         System.out.println(message);
@@ -137,7 +154,7 @@ public class DinosaurPet5 {
     //Feeds the pet
     public static void feed(Pet5 pet){
         Random random = new Random();
-        int feedAmount = random.nextInt(5) + 1;
+        int feedAmount = random.nextInt(6) + 1;
         if(getHunger(pet) < feedAmount){
             setHunger(pet, 0);
         }else{
@@ -148,7 +165,7 @@ public class DinosaurPet5 {
     //Gives the pet water
     public static void water(Pet5 pet){
         Random random = new Random();
-        int waterAmount = random.nextInt(5) + 1;
+        int waterAmount = random.nextInt(6) + 1;
         if(getThirst(pet) < waterAmount){
             setThirst(pet, 0);
         }else{
@@ -159,7 +176,7 @@ public class DinosaurPet5 {
     //Sings to the pet
     public static void sing(Pet5 pet){
         Random random = new Random();
-        int singAmount = random.nextInt(5) + 1;
+        int singAmount = random.nextInt(6) + 1;
         if(getIrritation(pet) < singAmount){
             setIrritation(pet, 0);
         }else{
@@ -190,6 +207,39 @@ public class DinosaurPet5 {
     //Sets the irritation of the specified pet
     public static void setIrritation(Pet5 pet, int irritation){
         pet.irritation = irritation;
+    }
+    
+    //Adds to the thirst of the specified pet
+    public static void addThirst(Pet5 pet){
+        Random random = new Random();
+        int amount = random.nextInt(5);
+        if(getThirst(pet) > 10 - amount){
+            setThirst(pet, 10);
+        }else{
+            setThirst(pet, getThirst(pet) + amount);
+        }
+    }
+    
+    //Adds to the hunger of the specified pet
+    public static void addHunger(Pet5 pet){
+        Random random = new Random();
+        int amount = random.nextInt(5);
+        if(getHunger(pet) > 10 - amount){
+            setHunger(pet, 10);
+        }else{
+            setHunger(pet, getHunger(pet) + amount);
+        }
+    }
+    
+    //Adds to the irritation of the specified pet
+    public static void addIrritation(Pet5 pet){
+        Random random = new Random();
+        int amount = random.nextInt(5);
+        if(getIrritation(pet) > 10 - amount){
+            setIrritation(pet, 10);
+        }else{
+            setIrritation(pet, getIrritation(pet) + amount);
+        }
     }
     
     //Calculates the anger of the specified pet
