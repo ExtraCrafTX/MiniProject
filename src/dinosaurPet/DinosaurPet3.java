@@ -17,6 +17,7 @@ public class DinosaurPet3 {
     
     //Launched on start of program
     public static void main(String[] args) {
+        explainProgram();
         String name = getName();
         String species = getSpecies();
         outputName(name);
@@ -27,6 +28,11 @@ public class DinosaurPet3 {
         outputHunger(hunger, name);
         int anger = getAngerScore(thirst, hunger);
         outputAnger(anger, name);
+    }
+    
+    //Explains what the program is
+    public static void explainProgram(){
+        System.out.println("This program will allow you to name a pet and take care of it!");
     }
     
     //Outputs the name of the pet

@@ -17,6 +17,7 @@ public class DinosaurPet5 {
     
     //Launched on start of program
     public static void main(String[] args) {
+        explainProgram();
         Pet5 pet = new Pet5();
         setName(pet, inputName());
         setSpecies(pet, inputSpecies());
@@ -50,6 +51,11 @@ public class DinosaurPet5 {
             calculateAnger(pet);
             outputAnger(pet);
         }
+    }
+    
+    //Explains what the program is
+    public static void explainProgram(){
+        System.out.println("This program will allow you to name a pet and take care of it!");
     }
     
     //Gets the action the user would like to do

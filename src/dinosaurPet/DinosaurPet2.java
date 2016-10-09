@@ -14,10 +14,15 @@ import java.util.Scanner;
 public class DinosaurPet2 {
     
     public static void main(String[] args) {
+        explainProgram();
         String name = getName();
         outputName(name);
         int thirst = getThirstLevel();
         outputThirst(thirst, name);
+    }
+    
+    public static void explainProgram(){
+        System.out.println("This program will allow you to name a pet and take care of it!");
     }
     
     public static void outputName(String name){

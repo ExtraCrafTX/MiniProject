@@ -17,6 +17,8 @@ public class DinosaurPet6 {
     
     //Launched on start of program
     public static void main(String[] args) {
+        explainProgram();
+        
         Pet6[] save = new Pet6[5];
         
         Pet6 pet = new Pet6();
@@ -93,6 +95,11 @@ public class DinosaurPet6 {
                 outputAnger(pet);
             }
         }
+    }
+    
+    //Explains what the program is
+    public static void explainProgram(){
+        System.out.println("This program will allow you to name a pet and take care of it!");
     }
     
     //Gets the action that the user wants to do
