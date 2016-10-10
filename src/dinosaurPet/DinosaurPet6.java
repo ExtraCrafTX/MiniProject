@@ -48,9 +48,6 @@ public class DinosaurPet6 {
         //Game loop
         while(true){
             while(getAnger(pet) < 4){
-                //Save the state
-                save = saveState(save, pet);
-                
                 //Get input
                 String input = inputAction().toLowerCase();
                 if(input.contains("feed")){
@@ -76,6 +73,9 @@ public class DinosaurPet6 {
                 //Calculate anger score
                 calculateAnger(pet);
                 outputAnger(pet);
+                
+                //Save the state
+                save = saveState(save, pet);
             }
             
             //Ask user for how many steps they want to go back
@@ -295,33 +295,39 @@ public class DinosaurPet6 {
     //Adds to the thirst of the specified pet
     public static void addThirst(Pet6 pet){
         Random random = new Random();
-        int amount = random.nextInt(6);
-        if(getThirst(pet) > 10 - amount){
-            setThirst(pet, 10);
-        }else{
-            setThirst(pet, getThirst(pet) + amount);
+        if(random.nextBoolean()){
+            int amount = random.nextInt(5) + 1;
+            if(getThirst(pet) > 10 - amount){
+                setThirst(pet, 10);
+            }else{
+                setThirst(pet, getThirst(pet) + amount);
+            }
         }
     }
     
     //Adds to the hunger of the specified pet
     public static void addHunger(Pet6 pet){
         Random random = new Random();
-        int amount = random.nextInt(6);
-        if(getHunger(pet) > 10 - amount){
-            setHunger(pet, 10);
-        }else{
-            setHunger(pet, getHunger(pet) + amount);
+        if(random.nextBoolean()){
+            int amount = random.nextInt(5) + 1;
+            if(getHunger(pet) > 10 - amount){
+                setHunger(pet, 10);
+            }else{
+                setHunger(pet, getHunger(pet) + amount);
+            }
         }
     }
     
     //Adds to the irritation of the specified pet
     public static void addIrritation(Pet6 pet){
         Random random = new Random();
-        int amount = random.nextInt(6);
-        if(getIrritation(pet) > 10 - amount){
-            setIrritation(pet, 10);
-        }else{
-            setIrritation(pet, getIrritation(pet) + amount);
+        if(random.nextBoolean()){
+            int amount = random.nextInt(5) + 1;
+            if(getIrritation(pet) > 10 - amount){
+                setIrritation(pet, 10);
+            }else{
+                setIrritation(pet, getIrritation(pet) + amount);
+            }
         }
     }
     
