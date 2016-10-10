@@ -39,6 +39,8 @@ public class DinosaurPet5 {
                 water(pet);
             }else if(input.contains("sing")){
                 sing(pet);
+            }else if(input.contains("end")){
+                System.exit(0);
             }else{
                 System.out.println("Please input a valid action.");
                 continue;
