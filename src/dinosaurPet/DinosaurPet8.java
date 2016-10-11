@@ -13,21 +13,49 @@ import java.util.Scanner;
  *
  * @author Kaamil Jasani
  */
-public class DinosaurPet7 {
+public class DinosaurPet8 {
+    
+    public static final String FEED_ACTION = "feed";
+    public static final String WATER_ACTION = "water";
+    public static final String SING_ACTION = "sing";
+    public static final String END_ACTION = "end";
+    public static final String INVALID_ACTION = "Please input a valid action.";
+    public static final String WIN_MESSAGE = "You won! All your pets were calm at once! You have achieved Dinosaur Nirvana!";
+    public static final String HOW_MANY_PETS = "How many pets would you like to have?";
+    public static final String SORT_PETS = "Would you like to sort pets by anger? (yes/no)";
+    public static final String YES = "yes";
+    public static final String NO = "no";
+    public static final String YES_OR_NO = "Please input either yes or no:";
+    public static final String SELECT_ID = "Please input the id of the pet you would like to take care of:";
+    public static final String INVALID_ID = "Invalid id!";
+    public static final String EXPLAIN_PROGRAM = "This program will allow you to name pets and take care of them!";
+    public static final String INPUT_ACTION = "What would you like to do? (water, feed, sing, end)";
+    public static final String INPUT_STEPS_BACK = "How many steps back would you like to go?";
+    public static final String INVALID_STEPS = "Please input a valid number of steps (0-5).";
+    public static final String CALM = " is relatively calm.";
+    public static final String IRRITABLE = " is slightly irritable.";
+    public static final String ANGRY = " is getting pretty angry now.";
+    public static final String DANGEROUS = " is getting quite dangerous now!";
+    public static final String EXPLODE = " is about ready to explode!";
+    public static final String PUT_DOWN = " is being put down for everyone's safety.";
     
     //Launched on start of program
     public static void main(String[] args) {
         explainProgram();
         
-        Save7 save = new Save7();
+        boolean toSort = askSort();
         
-        Menagerie7 menagerie = new Menagerie7();
+        Save8 save = new Save8();
+        
+        Menagerie8 menagerie = new Menagerie8();
         
         int numPets = inputNumPets();
         createMenagerie(menagerie, numPets);
         
         for(int i = 0; i < numPets; i++){
-            Pet7 pet = getPet(menagerie, i);
+            Pet8 pet = getPet(menagerie, i);
+            
+            setId(pet, i);
             
             //Get name and species
             setName(pet, inputName(i));
@@ -46,8 +74,17 @@ public class DinosaurPet7 {
 
             //Calculate anger score
             calculateAnger(pet);
-            
-            outputPet(pet, i);
+        }
+        
+        //Ask user if pets should be sorted
+        if(toSort)
+            sortByAnger(menagerie);
+        else
+            sortById(menagerie);
+        
+        for(int i = 0; i < numPets; i++){
+            Pet8 pet = getPet(menagerie, i);
+            outputPet(pet);
         }
         
         //Game loop
@@ -60,32 +97,42 @@ public class DinosaurPet7 {
                 //Ask user to select pet to take care of
                 int petToTakeCareOf = selectPet(numPets-1);
                 
-                //Get input
-                String input = inputAction().toLowerCase();
-                if(input.contains("feed")){
-                    feed(getPet(menagerie, petToTakeCareOf));
-                }else if(input.contains("water")){
-                    water(getPet(menagerie, petToTakeCareOf));
-                }else if(input.contains("sing")){
-                    sing(getPet(menagerie, petToTakeCareOf));
-                }else if(input.contains("end")){
-                    System.exit(0);
-                }else{
-                    System.out.println("Please input a valid action.");
-                    continue;
+                for(int i = 0; i < numPets; i++){
+                    if(getId(getPet(menagerie, i)) == petToTakeCareOf){
+                        //Get input
+                        String input = inputAction().toLowerCase();
+                        if(input.contains(FEED_ACTION)){
+                            feed(getPet(menagerie, petToTakeCareOf));
+                        }else if(input.contains(WATER_ACTION)){
+                            water(getPet(menagerie, petToTakeCareOf));
+                        }else if(input.contains(SING_ACTION)){
+                            sing(getPet(menagerie, petToTakeCareOf));
+                        }else if(input.contains(END_ACTION)){
+                            System.exit(0);
+                        }else{
+                            System.out.println(INVALID_ACTION);
+                            continue;
+                        }
+                    }
                 }
+                
+                toSort = askSort();
+                if(toSort)
+                    sortByAnger(menagerie);
+                else
+                    sortById(menagerie);
                 
                 //Updates all the pets and checks for winning or losing
                 nirvana = true;
                 for(int i = 0; i < numPets; i++){
-                    Pet7 pet = getPet(menagerie, i);
+                    Pet8 pet = getPet(menagerie, i);
 
                     //Update state of mind
                     updatePet(pet);
 
                     //Output state of mind
                     calculateAnger(pet);
-                    outputPet(pet, i);
+                    outputPet(pet);
                     
                     if(getAnger(pet) != 0){
                         nirvana = false;
@@ -109,23 +156,23 @@ public class DinosaurPet7 {
                     menagerie = loadState(save, numStepsBack);
 
                     for(int i = 0; i < numPets; i++){
-                        Pet7 pet = getPet(menagerie, i);
+                        Pet8 pet = getPet(menagerie, i);
 
-                        outputPet(pet, i);
+                        outputPet(pet);
                     }
                 }
             }else{
                 //If they won tell them so and end the game
-                System.out.println("You won! All your pets were calm at once! You have achieved Dinosaur Nirvana!");
+                System.out.println(WIN_MESSAGE);
                 break;
             }
         }
     }
     
     //Output all details about specified pet
-    public static void outputPet(Pet7 pet, int id){
+    public static void outputPet(Pet8 pet){
         System.out.println();
-        outputDetails(pet, id);
+        outputDetails(pet);
         outputThirst(pet);
         outputHunger(pet);
         outputIrritation(pet);
@@ -136,8 +183,26 @@ public class DinosaurPet7 {
     //Asks user to input the number of pets
     public static int inputNumPets(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("How many pets would you like to have?");
+        System.out.println(HOW_MANY_PETS);
         return scanner.nextInt();
+    }
+    
+    //Asks the user whether pets should be sorted and returns boolean
+    public static boolean askSort(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(SORT_PETS);
+        String input = "";
+        while(!(input.contains(YES) || input.contains(NO))){
+            input = scanner.nextLine();
+            if(input.contains(YES)){
+                return true;
+            }else if(input.contains(NO)){
+                return false;
+            }else{
+                System.out.println(YES_OR_NO);
+            }
+        }
+        return false;
     }
     
     //Asks user to input the ID of the pet they would like to take care of
@@ -145,10 +210,10 @@ public class DinosaurPet7 {
         Scanner scanner = new Scanner(System.in);
         int input = -1;
         while(input < 0 || input > max){
-            System.out.println("Enter the pet ID of the pet you would like to take care of: ");
+            System.out.println(SELECT_ID);
             input = scanner.nextInt();
             if(input < 0 || input > max){
-                System.out.println("Invalid ID!");
+                System.out.println(INVALID_ID);
             }
         }
         return input;
@@ -156,27 +221,27 @@ public class DinosaurPet7 {
     
     //Explains what the program is
     public static void explainProgram(){
-        System.out.println("This program will allow you to name pets and take care of them!");
+        System.out.println(EXPLAIN_PROGRAM);
     }
     
     //Gets the action that the user wants to do
     public static String inputAction(){
-        return input("What would you like to do? (feed, water, sing, end)");
+        return input(INPUT_ACTION);
     }
     
     //Gets input from the user as to how many steps back they would like to go
     public static int numStepsBack(){
-        int input = Integer.parseInt(input("How many steps back would you like to go?"));
+        int input = Integer.parseInt(input(INPUT_STEPS_BACK));
         while(input < 0 || input > 5){
-            System.out.println("Please input a valid number of steps (0-5).");
-            input = Integer.parseInt(input("How many steps back would you like to go?"));
+            System.out.println(INVALID_STEPS);
+            input = Integer.parseInt(input(INPUT_STEPS_BACK));
         }
         return input;
     }
     
     //Saves the state of the pet
-    public static Save7 saveState(Save7 save, Menagerie7 menagerie){
-        Save7 newSave = new Save7();
+    public static Save8 saveState(Save8 save, Menagerie8 menagerie){
+        Save8 newSave = new Save8();
         for(int i = 1; i < save.save.length; i++){
             newSave.save[i-1] = save.save[i];
         }
@@ -185,58 +250,58 @@ public class DinosaurPet7 {
     }
     
     //Creates a copy of the pet to avoid errors due to referencing instead of value
-    public static Menagerie7 copyState(Menagerie7 menagerie){
-        Menagerie7 savedState = new Menagerie7();
+    public static Menagerie8 copyState(Menagerie8 menagerie){
+        Menagerie8 savedState = new Menagerie8();
         savedState.pets = menagerie.pets;
         return savedState;
     }
     
     //Outputs the name of the pet
-    public static void outputName(Pet7 pet){
+    public static void outputName(Pet8 pet){
         System.out.println("Happy birthday " + getName(pet) + "!");
     }
     
     //Outputs the name of the pet
-    public static void outputSpecies(Pet7 pet){
+    public static void outputSpecies(Pet8 pet){
         System.out.println(getName(pet) + " is a " + getSpecies(pet) + ".");
     }
     
-    //Outputs details of the pet
-    public static void outputDetails(Pet7 pet, int id){
-        System.out.println("Pet name: " + getName(pet) + ". Pet ID: " + id + ".");
+    //Outputs the details of the pet
+    public static void outputDetails(Pet8 pet){
+        System.out.println("Pet name: " + getName(pet) + ". Pet ID: " + getId(pet) + ".");
     }
     
     //Outputs the thirst level of the pet
-    public static void outputThirst(Pet7 pet){
+    public static void outputThirst(Pet8 pet){
         System.out.println("The thirst level of " + getName(pet) + " is " + getThirst(pet) + "/10.");
     }
     
     //Outputs the hunger level of the pet
-    public static void outputHunger(Pet7 pet){
+    public static void outputHunger(Pet8 pet){
         System.out.println("The hunger level of " + getName(pet) + " is " + getHunger(pet) + "/10.");
     }
     
     //Outputs the irritation of the pet
-    public static void outputIrritation(Pet7 pet){
+    public static void outputIrritation(Pet8 pet){
         System.out.println("The irritation of " + getName(pet) + " is " + getIrritation(pet) + "/10.");
     }
     
     //Outputs the anger score of the pet
-    public static void outputAnger(Pet7 pet){
+    public static void outputAnger(Pet8 pet){
         int anger = getAnger(pet);
         String name = getName(pet);
         if(anger == 0){
-            System.out.println(name + " is relatively calm.");
+            System.out.println(name + CALM);
         }else if(anger == 1){
-            System.out.println(name + " is slightly irritable.");
+            System.out.println(name + IRRITABLE);
         }else if(anger == 2){
-            System.out.println(name + " is getting pretty angry now.");
+            System.out.println(name + ANGRY);
         }else if(anger == 3){
-            System.out.println(name + " is getting quite dangerous now!");
+            System.out.println(name + DANGEROUS);
         }else if(anger == 4){
-            System.out.println(name + " is about ready to explode!");
+            System.out.println(name + EXPLODE);
         }else{
-            System.out.println("Your pet is being put down for everyone's safety.");
+            System.out.println(name + PUT_DOWN);
         }
     }
     
@@ -269,7 +334,7 @@ public class DinosaurPet7 {
     }
     
     //Updates the state of mind of the pet
-    public static void updatePet(Pet7 pet){
+    public static void updatePet(Pet8 pet){
         Random random = new Random();
         int action = random.nextInt(3);
         switch(action){
@@ -293,7 +358,7 @@ public class DinosaurPet7 {
     }
     
     //Feeds the pet
-    public static void feed(Pet7 pet){
+    public static void feed(Pet8 pet){
         Random random = new Random();
         int feedAmount = random.nextInt(6) + 1;
         if(getHunger(pet) < feedAmount){
@@ -304,7 +369,7 @@ public class DinosaurPet7 {
     }
     
     //Gives the pet water
-    public static void water(Pet7 pet){
+    public static void water(Pet8 pet){
         Random random = new Random();
         int waterAmount = random.nextInt(6) + 1;
         if(getThirst(pet) < waterAmount){
@@ -315,7 +380,7 @@ public class DinosaurPet7 {
     }
     
     //Sings to the pet
-    public static void sing(Pet7 pet){
+    public static void sing(Pet8 pet){
         Random random = new Random();
         int singAmount = random.nextInt(6) + 1;
         if(getIrritation(pet) < singAmount){
@@ -326,32 +391,37 @@ public class DinosaurPet7 {
     }
     
     //Sets the name of the specified pet
-    public static void setName(Pet7 pet, String name){
+    public static void setName(Pet8 pet, String name){
         pet.name = name;
     }
     
     //Sets the species of the specified pet
-    public static void setSpecies(Pet7 pet, String species){
+    public static void setSpecies(Pet8 pet, String species){
         pet.species = species;
     }
     
     //Sets the thirst of the specified pet
-    public static void setThirst(Pet7 pet, int thirst){
+    public static void setThirst(Pet8 pet, int thirst){
         pet.thirst = thirst;
     }
     
     //Sets the hunger of the specified pet
-    public static void setHunger(Pet7 pet, int hunger){
+    public static void setHunger(Pet8 pet, int hunger){
         pet.hunger = hunger;
     }
     
     //Sets the irritation of the specified pet
-    public static void setIrritation(Pet7 pet, int irritation){
+    public static void setIrritation(Pet8 pet, int irritation){
         pet.irritation = irritation;
     }
     
+    //Sets the id of the pet
+    public static void setId(Pet8 pet, int id){
+        pet.id = id;
+    }
+    
     //Adds to the thirst of the specified pet
-    public static void addThirst(Pet7 pet){
+    public static void addThirst(Pet8 pet){
         Random random = new Random();
         if(random.nextBoolean()){
             int amount = random.nextInt(3) + 1;
@@ -364,7 +434,7 @@ public class DinosaurPet7 {
     }
     
     //Adds to the hunger of the specified pet
-    public static void addHunger(Pet7 pet){
+    public static void addHunger(Pet8 pet){
         Random random = new Random();
         if(random.nextBoolean()){
             int amount = random.nextInt(3) + 1;
@@ -377,7 +447,7 @@ public class DinosaurPet7 {
     }
     
     //Adds to the irritation of the specified pet
-    public static void addIrritation(Pet7 pet){
+    public static void addIrritation(Pet8 pet){
         Random random = new Random();
         if(random.nextBoolean()){
             int amount = random.nextInt(3) + 1;
@@ -390,67 +460,103 @@ public class DinosaurPet7 {
     }
     
     //Calculates the anger of the specified pet
-    public static void calculateAnger(Pet7 pet){
+    public static void calculateAnger(Pet8 pet){
         pet.anger = (pet.thirst + pet.hunger + pet.irritation)/6;
     }
     
     //Gets the name of the specified pet
-    public static String getName(Pet7 pet){
+    public static String getName(Pet8 pet){
         return pet.name;
     }
     
     //Gets the species of the specified pet
-    public static String getSpecies(Pet7 pet){
+    public static String getSpecies(Pet8 pet){
         return pet.species;
     }
     
     //Gets the thirst of the specified pet
-    public static int getThirst(Pet7 pet){
+    public static int getThirst(Pet8 pet){
         return pet.thirst;
     }
     
     //Gets the hunger of the specified pet
-    public static int getHunger(Pet7 pet){
+    public static int getHunger(Pet8 pet){
         return pet.hunger;
     }
     
     //Gets the irritation of the specified pet
-    public static int getIrritation(Pet7 pet){
+    public static int getIrritation(Pet8 pet){
         return pet.irritation;
     }
     
     //Gets the anger of the specified pet
-    public static int getAnger(Pet7 pet){
+    public static int getAnger(Pet8 pet){
         return pet.anger;
     }
     
+    //Gets the id of the pet
+    public static int getId(Pet8 pet){
+        return pet.id;
+    }
+    
     //Gets the pet at the specified index in the menagerie
-    public static Pet7 getPet(Menagerie7 menagerie, int index){
+    public static Pet8 getPet(Menagerie8 menagerie, int index){
         return menagerie.pets[index];
     }
     
     //Initialises the menagerie passed to it with the right number of slots
-    public static void createMenagerie(Menagerie7 menagerie, int numPets){
-        menagerie.pets = new Pet7[numPets];
+    public static void createMenagerie(Menagerie8 menagerie, int numPets){
+        menagerie.pets = new Pet8[numPets];
         for(int i = 0; i < numPets; i++){
-            menagerie.pets[i] = new Pet7();
+            menagerie.pets[i] = new Pet8();
         }
     }
     
     //Gets the size of the menagerie
-    public static int getSize(Menagerie7 menagerie){
+    public static int getSize(Menagerie8 menagerie){
         return menagerie.pets.length;
     }
     
     //Loads the state from the specified save
-    public static Menagerie7 loadState(Save7 save, int numStepsBack){
+    public static Menagerie8 loadState(Save8 save, int numStepsBack){
         return save.save[save.save.length - numStepsBack];
+    }
+    
+    //Sorts the pets by Anger
+    public static void sortByAnger(Menagerie8 menagerie){
+        for(int p = getSize(menagerie); p >= 0; p--){
+            for(int i = 0; i < p - 1; i++){
+                int j = i + 1;
+                if(getAnger(getPet(menagerie, i)) > getAnger(getPet(menagerie, j))){
+                    swap(i, j, menagerie.pets);
+                }
+            }
+        }
+    }
+
+    //Sorts the pets by ID
+    public static void sortById(Menagerie8 menagerie) {
+        for(int p = getSize(menagerie); p >= 0; p--){
+            for(int i = 0; i < p - 1; i++){
+                int j = i + 1;
+                if(getId(getPet(menagerie, i)) > getId(getPet(menagerie, j))){
+                    swap(i, j, menagerie.pets);
+                }
+            }
+        }
+    }
+    
+    //Swaps two entries of an array
+    public static void swap(int i, int j, Pet8[] array){
+        Pet8 temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
     
 }
 
 //Record class to store information about pet
-class Pet7{
+class Pet8{
     
     String name;
     String species;
@@ -458,19 +564,20 @@ class Pet7{
     int hunger;
     int irritation;
     int anger;
+    int id;
     
 }
 
 //Abstract data type to hold multiple pets
-class Menagerie7{
+class Menagerie8{
     
-    Pet7[] pets;
+    Pet8[] pets;
     
 }
 
 //Abstract data type to hold the saved states
-class Save7{
+class Save8{
     
-    Menagerie7[] save = new Menagerie7[5];
+    Menagerie8[] save = new Menagerie8[5];
     
 }
