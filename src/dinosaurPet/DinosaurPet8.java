@@ -82,10 +82,7 @@ public class DinosaurPet8 {
         else
             sortById(menagerie);
         
-        for(int i = 0; i < numPets; i++){
-            Pet8 pet = getPet(menagerie, i);
-            outputPet(pet);
-        }
+        outputPets(menagerie);
         
         //Game loop
         while(true){
@@ -116,12 +113,6 @@ public class DinosaurPet8 {
                     }
                 }
                 
-                toSort = askSort();
-                if(toSort)
-                    sortByAnger(menagerie);
-                else
-                    sortById(menagerie);
-                
                 //Updates all the pets and checks for winning or losing
                 nirvana = true;
                 for(int i = 0; i < numPets; i++){
@@ -129,10 +120,7 @@ public class DinosaurPet8 {
 
                     //Update state of mind
                     updatePet(pet);
-
-                    //Output state of mind
                     calculateAnger(pet);
-                    outputPet(pet);
                     
                     if(getAnger(pet) != 0){
                         nirvana = false;
@@ -141,6 +129,14 @@ public class DinosaurPet8 {
                         lost = true;
                     }
                 }
+                
+                toSort = askSort();
+                if(toSort)
+                    sortByAnger(menagerie);
+                else
+                    sortById(menagerie);
+                
+                outputPets(menagerie);
                 
                 //Save the state
                 save = saveState(save, menagerie);
@@ -166,6 +162,14 @@ public class DinosaurPet8 {
                 System.out.println(WIN_MESSAGE);
                 break;
             }
+        }
+    }
+    
+    //Outputs details of all pets in specified menagerie
+    public static void outputPets(Menagerie8 menagerie){
+        for(int i = 0; i < getSize(menagerie); i++){
+            Pet8 pet = getPet(menagerie, i);
+            outputPet(pet);
         }
     }
     

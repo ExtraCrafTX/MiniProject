@@ -51,7 +51,7 @@ public class DinosaurPet9 {
     public static void main(String[] args) {
         explainProgram();
         
-        File file = new File("test.txt");
+        File file = new File("save.txt");
         boolean load = file.exists();
         if(load){
             load = askLoad();
