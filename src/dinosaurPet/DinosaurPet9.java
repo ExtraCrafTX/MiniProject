@@ -46,12 +46,13 @@ public class DinosaurPet9 {
     public static final String LOAD = "load";
     public static final String NEW = "new";
     public static final String LOAD_NEW = "Please input either load or new:";
+    public static final String FILE_NAME = "save.txt";
     
     //Launched on start of program
     public static void main(String[] args) {
         explainProgram();
         
-        File file = new File("save.txt");
+        File file = new File(FILE_NAME);
         boolean load = file.exists();
         if(load){
             load = askLoad();
