@@ -46,7 +46,7 @@ public class DinosaurPet9 {
     public static final String LOAD = "load";
     public static final String NEW = "new";
     public static final String LOAD_NEW = "Please input either load or new:";
-    public static final String FILE_NAME = "save.txt";
+    public static final String FILE_NAME = "save.pets";
     
     //Launched on start of program
     public static void main(String[] args) {
