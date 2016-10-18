@@ -43,6 +43,7 @@ public class DinosaurPet8 {
     public static void main(String[] args) {
         explainProgram();
         
+        //Ask user if pets should be sorted
         boolean toSort = askSort();
         
         Save8 save = new Save8();
@@ -52,70 +53,26 @@ public class DinosaurPet8 {
         int numPets = inputNumPets();
         createMenagerie(menagerie, numPets);
         
-        for(int i = 0; i < numPets; i++){
-            Pet8 pet = getPet(menagerie, i);
-            
-            setId(pet, i);
-            
-            //Get name and species
-            setName(pet, inputName(i));
-            setSpecies(pet, inputSpecies(i));
-            outputName(pet);
-            outputSpecies(pet);
-
-            //Randomly give it thirst
-            setThirst(pet, calculateThirstLevel());
-
-            //Randomly give it hunger
-            setHunger(pet, calculateHungerLevel());
-
-            //Randomly give it irritation
-            setIrritation(pet, calculateIrritation());
-
-            //Calculate anger score
-            calculateAnger(pet);
-        }
-        
-        //Ask user if pets should be sorted
-        if(toSort)
-            sortByAnger(menagerie);
-        else
-            sortById(menagerie);
+        sort(menagerie, toSort);
         
         outputPets(menagerie);
         
-        //Game loop
+        gameLoop(menagerie, save);
+    }
+    
+    //Loops to keep the game running
+    public static void gameLoop(Menagerie8 menagerie, Save8 save){
         while(true){
             //Declare and initialise variables to keep track of winning or losing
             boolean nirvana = false;
             boolean lost = false;
             
             while(!nirvana && !lost){
-                //Ask user to select pet to take care of
-                int petToTakeCareOf = selectPet(numPets-1);
-                
-                for(int i = 0; i < numPets; i++){
-                    if(getId(getPet(menagerie, i)) == petToTakeCareOf){
-                        //Get input
-                        String input = inputAction().toLowerCase();
-                        if(input.contains(FEED_ACTION)){
-                            feed(getPet(menagerie, i));
-                        }else if(input.contains(WATER_ACTION)){
-                            water(getPet(menagerie, i));
-                        }else if(input.contains(SING_ACTION)){
-                            sing(getPet(menagerie, i));
-                        }else if(input.contains(END_ACTION)){
-                            System.exit(0);
-                        }else{
-                            System.out.println(INVALID_ACTION);
-                            continue;
-                        }
-                    }
-                }
+                performAction(menagerie);
                 
                 //Updates all the pets and checks for winning or losing
                 nirvana = true;
-                for(int i = 0; i < numPets; i++){
+                for(int i = 0; i < getSize(menagerie); i++){
                     Pet8 pet = getPet(menagerie, i);
 
                     //Update state of mind
@@ -130,11 +87,8 @@ public class DinosaurPet8 {
                     }
                 }
                 
-                toSort = askSort();
-                if(toSort)
-                    sortByAnger(menagerie);
-                else
-                    sortById(menagerie);
+                boolean toSort = askSort();
+                sort(menagerie, toSort);
                 
                 outputPets(menagerie);
                 
@@ -151,7 +105,7 @@ public class DinosaurPet8 {
                     //Load state
                     menagerie = loadState(save, numStepsBack);
 
-                    for(int i = 0; i < numPets; i++){
+                    for(int i = 0; i < getSize(menagerie); i++){
                         Pet8 pet = getPet(menagerie, i);
 
                         outputPet(pet);
@@ -160,6 +114,41 @@ public class DinosaurPet8 {
             }else{
                 //If they won tell them so and end the game
                 System.out.println(WIN_MESSAGE);
+                break;
+            }
+        }
+    }
+    
+    //Sorts based on anger or id
+    public static void sort(Menagerie8 menagerie, boolean byAnger){
+        if(byAnger)
+            sortByAnger(menagerie);
+        else
+            sortById(menagerie);
+    }
+    
+    //Allows the user to perform an action
+    public static void performAction(Menagerie8 menagerie){
+        //Ask user to select pet to take care of
+        int petToTakeCareOf = selectPet(getSize(menagerie)-1);
+
+        for(int i = 0; i < getSize(menagerie); i++){
+            if(getId(getPet(menagerie, i)) == petToTakeCareOf){
+                //Get input
+                String input = inputAction().toLowerCase();
+                if(input.contains(FEED_ACTION)){
+                    feed(getPet(menagerie, i));
+                }else if(input.contains(WATER_ACTION)){
+                    water(getPet(menagerie, i));
+                }else if(input.contains(SING_ACTION)){
+                    sing(getPet(menagerie, i));
+                }else if(input.contains(END_ACTION)){
+                    System.exit(0);
+                }else{
+                    System.out.println(INVALID_ACTION);
+                    i--;
+                    continue;
+                }
                 break;
             }
         }
@@ -513,6 +502,30 @@ public class DinosaurPet8 {
         menagerie.pets = new Pet8[numPets];
         for(int i = 0; i < numPets; i++){
             menagerie.pets[i] = new Pet8();
+        }
+        
+        for(int i = 0; i < numPets; i++){
+            Pet8 pet = getPet(menagerie, i);
+            
+            setId(pet, i);
+            
+            //Get name and species
+            setName(pet, inputName(i));
+            setSpecies(pet, inputSpecies(i));
+            outputName(pet);
+            outputSpecies(pet);
+
+            //Randomly give it thirst
+            setThirst(pet, calculateThirstLevel());
+
+            //Randomly give it hunger
+            setHunger(pet, calculateHungerLevel());
+
+            //Randomly give it irritation
+            setIrritation(pet, calculateIrritation());
+
+            //Calculate anger score
+            calculateAnger(pet);
         }
     }
     

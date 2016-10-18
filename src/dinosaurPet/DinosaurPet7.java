@@ -26,58 +26,22 @@ public class DinosaurPet7 {
         int numPets = inputNumPets();
         createMenagerie(menagerie, numPets);
         
-        for(int i = 0; i < numPets; i++){
-            Pet7 pet = getPet(menagerie, i);
-            
-            //Get name and species
-            setName(pet, inputName(i));
-            setSpecies(pet, inputSpecies(i));
-            outputName(pet);
-            outputSpecies(pet);
-
-            //Randomly give it thirst
-            setThirst(pet, calculateThirstLevel());
-
-            //Randomly give it hunger
-            setHunger(pet, calculateHungerLevel());
-
-            //Randomly give it irritation
-            setIrritation(pet, calculateIrritation());
-
-            //Calculate anger score
-            calculateAnger(pet);
-            
-            outputPet(pet, i);
-        }
-        
-        //Game loop
+        gameLoop(menagerie, save);
+    }
+    
+    //Loops to keep the game running
+    public static void gameLoop(Menagerie7 menagerie, Save7 save){
         while(true){
             //Declare and initialise variables to keep track of winning or losing
             boolean nirvana = false;
             boolean lost = false;
             
             while(!nirvana && !lost){
-                //Ask user to select pet to take care of
-                int petToTakeCareOf = selectPet(numPets-1);
-                
-                //Get input
-                String input = inputAction().toLowerCase();
-                if(input.contains("feed")){
-                    feed(getPet(menagerie, petToTakeCareOf));
-                }else if(input.contains("water")){
-                    water(getPet(menagerie, petToTakeCareOf));
-                }else if(input.contains("sing")){
-                    sing(getPet(menagerie, petToTakeCareOf));
-                }else if(input.contains("end")){
-                    System.exit(0);
-                }else{
-                    System.out.println("Please input a valid action.");
-                    continue;
-                }
+                performAction(menagerie);
                 
                 //Updates all the pets and checks for winning or losing
                 nirvana = true;
-                for(int i = 0; i < numPets; i++){
+                for(int i = 0; i < getSize(menagerie); i++){
                     Pet7 pet = getPet(menagerie, i);
 
                     //Update state of mind
@@ -108,7 +72,7 @@ public class DinosaurPet7 {
                     //Load state
                     menagerie = loadState(save, numStepsBack);
 
-                    for(int i = 0; i < numPets; i++){
+                    for(int i = 0; i < getSize(menagerie); i++){
                         Pet7 pet = getPet(menagerie, i);
 
                         outputPet(pet, i);
@@ -118,6 +82,31 @@ public class DinosaurPet7 {
                 //If they won tell them so and end the game
                 System.out.println("You won! All your pets were calm at once! You have achieved Dinosaur Nirvana!");
                 break;
+            }
+        }
+    }
+    
+    //Lets the user perform an action
+    public static void performAction(Menagerie7 menagerie){
+        //Ask user to select pet to take care of
+        int petToTakeCareOf = selectPet(getSize(menagerie)-1);
+        
+        while(true){
+            //Get input
+            String input = inputAction().toLowerCase();
+            if(input.contains("feed")){
+                feed(getPet(menagerie, petToTakeCareOf));
+                return;
+            }else if(input.contains("water")){
+                water(getPet(menagerie, petToTakeCareOf));
+                return;
+            }else if(input.contains("sing")){
+                sing(getPet(menagerie, petToTakeCareOf));
+                return;
+            }else if(input.contains("end")){
+                System.exit(0);
+            }else{
+                System.out.println("Please input a valid action.");
             }
         }
     }
@@ -434,6 +423,30 @@ public class DinosaurPet7 {
         menagerie.pets = new Pet7[numPets];
         for(int i = 0; i < numPets; i++){
             menagerie.pets[i] = new Pet7();
+        }
+        
+        for(int i = 0; i < numPets; i++){
+            Pet7 pet = getPet(menagerie, i);
+            
+            //Get name and species
+            setName(pet, inputName(i));
+            setSpecies(pet, inputSpecies(i));
+            outputName(pet);
+            outputSpecies(pet);
+
+            //Randomly give it thirst
+            setThirst(pet, calculateThirstLevel());
+
+            //Randomly give it hunger
+            setHunger(pet, calculateHungerLevel());
+
+            //Randomly give it irritation
+            setIrritation(pet, calculateIrritation());
+
+            //Calculate anger score
+            calculateAnger(pet);
+            
+            outputPet(pet, i);
         }
     }
     

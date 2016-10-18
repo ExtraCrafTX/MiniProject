@@ -19,6 +19,12 @@ public class DinosaurPet5 {
     public static void main(String[] args) {
         explainProgram();
         Pet5 pet = new Pet5();
+        initialisePet(pet);
+        gameLoop(pet);
+    }
+    
+    //Initialises the pet with user input and random state of mind
+    public static void initialisePet(Pet5 pet){
         setName(pet, inputName());
         setSpecies(pet, inputSpecies());
         outputName(pet);
@@ -31,6 +37,10 @@ public class DinosaurPet5 {
         outputIrritation(pet);
         calculateAnger(pet);
         outputAnger(pet);
+    }
+    
+    //Loops while the game is still running
+    public static void gameLoop(Pet5 pet){
         while(getAnger(pet) != 5){
             String input = inputAction().toLowerCase();
             if(input.contains("feed")){

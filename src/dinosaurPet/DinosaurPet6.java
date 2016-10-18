@@ -22,46 +22,17 @@ public class DinosaurPet6 {
         Pet6[] save = new Pet6[5];
         
         Pet6 pet = new Pet6();
+        initialisePet(pet);
         
-        //Get name and species
-        setName(pet, inputName());
-        setSpecies(pet, inputSpecies());
-        outputName(pet);
-        outputSpecies(pet);
-        
-        //Randomly give it thirst
-        setThirst(pet, calculateThirstLevel());
-        outputThirst(pet);
-        
-        //Randomly give it hunger
-        setHunger(pet, calculateHungerLevel());
-        outputHunger(pet);
-        
-        //Randomly give it irritation
-        setIrritation(pet, calculateIrritation());
-        outputIrritation(pet);
-        
-        //Calculate anger score
-        calculateAnger(pet);
-        outputAnger(pet);
-        
-        //Game loop
+        gameLoop(pet, save);
+    }
+    
+    //Loops to keep the game running
+    public static void gameLoop(Pet6 pet, Pet6[] save){
         while(true){
             while(getAnger(pet) < 4){
-                //Get input
-                String input = inputAction().toLowerCase();
-                if(input.contains("feed")){
-                    feed(pet);
-                }else if(input.contains("water")){
-                    water(pet);
-                }else if(input.contains("sing")){
-                    sing(pet);
-                }else if(input.contains("end")){
-                    System.exit(0);
-                }else{
-                    System.out.println("Please input a valid action.");
-                    continue;
-                }
+                //Allow user to perform action
+                performAction(pet);
 
                 //Update state of mind
                 updatePet(pet);
@@ -97,6 +68,53 @@ public class DinosaurPet6 {
                 outputAnger(pet);
             }
         }
+    }
+    
+    //Allows user to perform an action
+    public static void performAction(Pet6 pet){
+        while(true){
+            //Get input
+            String input = inputAction().toLowerCase();
+            if(input.contains("feed")){
+                feed(pet);
+                return;
+            }else if(input.contains("water")){
+                water(pet);
+                return;
+            }else if(input.contains("sing")){
+                sing(pet);
+                return;
+            }else if(input.contains("end")){
+                System.exit(0);
+            }else{
+                System.out.println("Please input a valid action.");
+            }
+        }
+    }
+    
+    //Initialises the pet using user input and a random state of mind
+    public static void initialisePet(Pet6 pet){
+        //Get name and species
+        setName(pet, inputName());
+        setSpecies(pet, inputSpecies());
+        outputName(pet);
+        outputSpecies(pet);
+        
+        //Randomly give it thirst
+        setThirst(pet, calculateThirstLevel());
+        outputThirst(pet);
+        
+        //Randomly give it hunger
+        setHunger(pet, calculateHungerLevel());
+        outputHunger(pet);
+        
+        //Randomly give it irritation
+        setIrritation(pet, calculateIrritation());
+        outputIrritation(pet);
+        
+        //Calculate anger score
+        calculateAnger(pet);
+        outputAnger(pet);
     }
     
     //Explains what the program is
