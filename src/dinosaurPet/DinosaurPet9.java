@@ -168,10 +168,10 @@ public class DinosaurPet9 {
                 
                 outputPets(menagerie);
                 
+                writeState(menagerie, save, file);
+                
                 //Save the state
                 save = saveState(save, menagerie);
-                
-                writeState(menagerie, save, file);
             }
             
             if(lost){
@@ -308,8 +308,23 @@ public class DinosaurPet9 {
     //Creates a copy of the pet to avoid errors due to referencing instead of value
     public static Menagerie9 copyState(Menagerie9 menagerie){
         Menagerie9 savedState = new Menagerie9();
-        savedState.pets = menagerie.pets;
+        savedState.pets = new Pet9[getSize(menagerie)];
+        for(int i = 0; i < savedState.pets.length; i++){
+            savedState.pets[i] = copyPet(menagerie.pets[i]);
+        }
         return savedState;
+    }
+    
+    public static Pet9 copyPet(Pet9 pet){
+        Pet9 newPet = new Pet9();
+        newPet.anger = pet.anger;
+        newPet.hunger = pet.hunger;
+        newPet.id = pet.id;
+        newPet.irritation = pet.irritation;
+        newPet.name = pet.name;
+        newPet.species = pet.species;
+        newPet.thirst = pet.thirst;
+        return newPet;
     }
     
     //Outputs the name of the pet
